@@ -1,0 +1,24 @@
+.chalenge {
+  background-color: #d0deff;
+  color: #181c26;
+  border: 1px solid black;
+  padding: 1.5em 2.9em;
+  border-radius: 30px;
+  font-weight: bolder;
+  cursor: pointer;
+  letter-spacing: 0.2px;
+}
+.text {
+  text-align: center;
+  max-width: 70%;
+  line-height: 1.5;
+}
+.wrapperMain {
+  display: flex;
+  width: 90%;
+  height: 60vh;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+}

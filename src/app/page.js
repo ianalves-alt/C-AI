@@ -1,10 +1,10 @@
-import Shit from "../comp/data.jsx";
-export default function Page() {
+import MainF from "@/Components/main";
+import Navbar from "@/Components/nav";
+export default function MPage() {
   return (
     <>
-      <div>
-        <h1>Testing aaaaaaaaaaaaaaaaaa</h1> <Shit></Shit>
-      </div>
+      <Navbar />
+      <MainF></MainF>
     </>
   );
 }
