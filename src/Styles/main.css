@@ -9,16 +9,16 @@
   letter-spacing: 0.2px;
 }
 .text {
-  text-align: center;
+  text-align: justify;
   max-width: 70%;
   line-height: 1.5;
 }
 .wrapperMain {
   display: flex;
   width: 90%;
-  height: 60vh;
+  height: 30vh;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  margin: 0 auto;
+  margin: 3rem auto;
 }

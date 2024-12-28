@@ -1,32 +1,9 @@
-import "@/Styles/main.css";
+"use server";
 import dotenv from "dotenv";
-import fs from "fs/promises";
-import path from "path";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import Text from "./Text";
+import Content from "./Content";
 
 dotenv.config({ path: "/env.local" });
-
-const getPrompt = async (difficultyLevel, userFeedback) => {
-  let data = await getData();
-  let basePrompt = "Hi Gemini, I'm studying C programming.";
-  basePrompt += `Please give me a project idea focused on C programming, based on the last prompt: (${data.data.previousPrompt}`;
-  if (userFeedback === 3) {
-    basePrompt =
-      "The project you gave me was too hard, Make it easier than the last project ";
-  } else if (userFeedback === 1) {
-    basePrompt = "Make it just a step harder";
-  }
-
-  if (!data.data.previousPrompt) {
-    basePrompt =
-      "Hi Gemini, I'm starting with C programming, keep it as simple as the following project. Project Idea: Write a program that prints Hello, World! to the console. Description: Helps you understand the basic structure of a C program, including the use of the main function and printf for output. Improvement: Develops understanding of program structure and basic output. Example Output: Hello, World! give me a project as easy as that";
-  }
-  basePrompt +=
-    " Include a description, what I'll improve with it, example output, and keep it under 100 words.";
-  return basePrompt;
-};
-//1 = too easy/ 2 = medium/ 3 = hard
 const getData = async () => {
   const req = await fetch("http://localhost:3000/api", {
     method: "GET",
@@ -37,14 +14,51 @@ const getData = async () => {
   const data = await req.json();
   return data;
 };
-const patchData = async (difficultyLevel, feedback) => {
+
+const getPrompt = async (difficultyLevel, userFeedback) => {
+  let data = await getData();
+  let basePrompt = "give me an C programming project.";
+
+  if (userFeedback === 3) {
+    basePrompt = "The last project was too hard. Suggest an easier one.";
+  } else if (userFeedback === 1) {
+    basePrompt =
+      "The last project was too easy. Suggest a slightly harder one.";
+  } else if (!data.data.recentPrompt) {
+    basePrompt = "I'm new to programming. Suggest a very simple project in C.";
+  } else {
+    basePrompt += ` make it a tiny bit harder than the last project, introducing one concept at a time. last Project: (${data.data.recentPrompt}).`;
+  }
+
+  basePrompt += `base the prompt following a pattern of linear difficulty, assume the person never coded before, and base it on the last projects: ${data.data.previousPrompts}, make it one clean paragraph explaining new concepts, descriptions and without special formatting, just one clean paragraph, each project should introduce a new concept for a aspiring programmer based on the last projects, focus on slow progression, youre an ai that helps people that know nothing about programming learn by doing projects each day, so, based on the given previous prompts, give a project to teach the clueless person, a new, simple compared to the last one, concept the new concept must not use concepts not given yet, it must be a ladder where you cant show something you didnt covered yet`;
+
+  return basePrompt;
+};
+//1 = too easy/ 2 = medium/ 3 = hard
+const PostData = async (data) => {
+  const res = await fetch("http://localhost:3000/api", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ prompt: data }),
+  });
+
+  if (!res.ok) {
+    console.error(`failed to Post, status code: ${res.status}`);
+  } else {
+    const data = await res.json();
+  }
+};
+
+const patchData = async (difficultyLevel, newPrompt) => {
   const res = await fetch("http://localhost:3000/api", {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      newPrompt: getPrompt(difficultyLevel, feedback),
+      newPrompt: newPrompt,
       difficultyLevel: difficultyLevel,
     }),
   });
@@ -59,53 +73,9 @@ const patchData = async (difficultyLevel, feedback) => {
     );
   }
 };
-
-/*async run() {
-      const previousOutput =
-        (await this.getPreviousOutput()) || this.prompts.initial;
-      console.log("previous output:\n\n", previousOutput, "\n\n\n");
-
-      const prompt = `${this.prompts.template}. Previous output: ${previousOutput}`;
-
-      console.log("prompt sent: \n\n", prompt, "\n\n\n");
-
-//everything up is already done in getprompt()
-//
-//
-//
-
-
-
-
-      // Use the correct method from the library
-      const chat = genAI.startChat({
-        history: [],
-        generationConfig: {
-          maxOutputTokens: 500,
-        },
-      });
-
-      const result = await chat.sendMessage(prompt);
-      const text = result.response; // Assuming response is already the text
-      console.log(text);
-
-      this.text = text;
-      await this.saveOutput(text);
-    },
-  };
-
-  try {
-    await mainObj.run(); // Ensure the asynchronous function is awaited
-    res.status(200).json({ text: mainObj.text });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error processing request" });
-  }
-}*/
-
 const run = async () => {
   const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const chat = model.startChat({
     history: [],
     generationConfig: {
@@ -113,24 +83,45 @@ const run = async () => {
     },
   });
   const prompt = await getPrompt();
+
   const result = await chat.sendMessage(prompt);
-  const text = result.response;
+  const response = result.response;
+  const text = response.text();
+
+  await patchData("_", text);
   return text;
 };
+const AIformatting = async (text) => {
+  const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const chat = model.startChat({
+    history: [],
+    generationConfig: {
+      maxOutputTokens: 500,
+      response_mime_type: "application/json",
+    },
+  });
+  const prompt = `follow the pattern(each one is describing the concept covered in a C programming project) and answer in the same format: "project print to console ": "basic printing to console"/ "project number guessing": "conditional statements"/${text}: ...?. just answer with the third one. `;
+  const result = await chat.sendMessage(prompt);
+  const response = result.response;
+  const formatted = response.text();
+  console.log(formatted);
+  return formatted;
+};
 export default async function MainF() {
-  console.log("hi");
   const data = await getData();
+  const text = await run();
+  console.log(text);
+  AIformatting(text).then((formattedText) => {
+    PostData(formattedText);
+  });
 
   return (
     <>
       <div className="wrapperMain">
         <div className="text">
-          <Text text={data} />
-          {run()}
+          <Content text={text} />
         </div>
-        <button type="button" className="chalenge">
-          Todays Challenge
-        </button>
       </div>
     </>
   );

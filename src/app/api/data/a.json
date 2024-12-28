@@ -1,4 +1,12 @@
 {
-  "previousPrompt": "",
-  "difficultyLevel": "hi"
+  "difficultyLevel": "_",
+  "previousPrompts": [
+    {
+      "project structs with strings": "structs and string manipulation"
+    },
+    {
+      "project function return values": "function return values and using them to pass data back to the calling function"
+    }
+  ],
+  "recentPrompt": "This project builds on the previous one by introducing the concept of functions returning values.  Instead of having the `apply_operation` function modify the `Data` struct directly, it will now perform the array operation and return the result (a double representing, for example, the sum of the arrays for the \"add\" operation). The `main` function will then call `apply_operation`, receive the returned value, and print it to the console.  The `Data` struct will remain the same, still containing the arrays and the operation description string. The `apply_operation` function will need to calculate a single result (e.g., the sum of corresponding elements) from the arrays and return this single `double` value.  This exercise focuses on understanding function return values and how to use them to pass data back to the calling function, reinforcing your knowledge of structs and string handling from the previous project.  Remember to carefully consider what to return for each operation (\"add\", \"subtract\", \"multiply\").\n"
 }

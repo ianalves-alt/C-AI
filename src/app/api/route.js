@@ -47,22 +47,61 @@ export async function GET(req) {
     );
   }
 }
-
-export async function PATCH(req, res) {
-  const { newPrompt, difficultyLevel } = await req.json();
+export async function POST(req) {
+  const { prompt } = await req.json();
   let data = {};
-
   try {
     const filecontents = await fs.readFile(dataFilePath, "utf-8");
     if (filecontents !== "") {
       data = JSON.parse(filecontents);
     }
+    console.log("file successfully transfered to data variable");
+  } catch (error) {
+    console.error("error reading:", error);
+    data = {};
+  }
+  const array = data.previousPrompts;
+  array.push(JSON.parse(prompt));
+  if (array.length > 20) {
+    array.splice(0, array.length - 1);
+  }
+  try {
+    await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2), "utf-8");
+    return NextResponse.json({ message: "Prompt added successfully", data });
+  } catch (error) {
+    console.error("error adding to file", error);
+    return NextResponse.json(
+      { message: "Error updating the prompt" },
+      { status: 500 },
+    );
+  }
+}
+
+export async function PATCH(req, res) {
+  const { newPrompt, difficultyLevel } = await req.json();
+  let data = {};
+  try {
+    const filecontents = await fs.readFile(dataFilePath, "utf-8");
+    if (filecontents !== "") {
+      data = JSON.parse(filecontents);
+    }
+    console.log("file successfully transfered to data variable");
+  } catch (error) {
+    console.error("error reading:", error);
+    data = {};
+  }
+  try {
+    const filecontents = await fs.readFile(dataFilePath, "utf-8");
+    if (filecontents !== "") {
+      data = JSON.parse(filecontents);
+    }
+    console.log("file successfully transfered to data variable");
   } catch (error) {
     console.error("error reading:", error);
     data = {};
   }
 
-  data.previousPrompt = newPrompt;
+  data.recentPrompt = newPrompt;
 
   data.difficultyLevel = difficultyLevel;
   try {
