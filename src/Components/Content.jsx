@@ -1,9 +1,9 @@
 "use client";
-
 import "@/Styles/main.css";
 import { useState } from "react";
 export default function Content({ text }) {
   const [show, setShow] = useState(false);
+  const [show2, setshow2] = useState(false);
   const T = show ? text : "";
   const buttonText = show ? "Todays challenge" : "";
   return (

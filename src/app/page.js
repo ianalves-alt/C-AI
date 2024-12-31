@@ -1,10 +1,8 @@
-import MainF from "@/Components/main";
-import Navbar from "@/Components/nav";
+import OverAll from "@/Components/OverAll";
 export default function MPage() {
   return (
     <>
-      <Navbar />
-      <MainF></MainF>
+      <OverAll></OverAll>
     </>
   );
 }

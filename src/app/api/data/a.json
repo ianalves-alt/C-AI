@@ -2,11 +2,11 @@
   "difficultyLevel": "_",
   "previousPrompts": [
     {
-      "project structs with strings": "structs and string manipulation"
+      "project report generation for student records": "file output, report generation, data formatting, error handling"
     },
     {
-      "project function return values": "function return values and using them to pass data back to the calling function"
+      "project search student record": "linear search, file input/output, string comparison, error handling"
     }
   ],
-  "recentPrompt": "This project builds on the previous one by introducing the concept of functions returning values.  Instead of having the `apply_operation` function modify the `Data` struct directly, it will now perform the array operation and return the result (a double representing, for example, the sum of the arrays for the \"add\" operation). The `main` function will then call `apply_operation`, receive the returned value, and print it to the console.  The `Data` struct will remain the same, still containing the arrays and the operation description string. The `apply_operation` function will need to calculate a single result (e.g., the sum of corresponding elements) from the arrays and return this single `double` value.  This exercise focuses on understanding function return values and how to use them to pass data back to the calling function, reinforcing your knowledge of structs and string handling from the previous project.  Remember to carefully consider what to return for each operation (\"add\", \"subtract\", \"multiply\").\n"
+  "recentPrompt": "This project expands on the student record system by adding the ability to search for specific student records.  The program should allow the user to input a student ID and then search the data file (previously created and populated) for a matching ID. If a match is found, the program should display the student's complete record (ID, name, and all grades and weights); otherwise, it should display a \"Student not found\" message. This introduces the concept of linear searching through data stored in a file, reinforcing file input/output and string comparison (comparing the entered ID with IDs in the file).  Error handling should still be implemented for file operations, and the program should gracefully handle cases where the input ID is invalid (e.g., not a number or not found in the file).\n"
 }
