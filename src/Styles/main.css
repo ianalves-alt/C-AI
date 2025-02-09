@@ -21,4 +21,25 @@
   justify-content: space-between;
   align-items: center;
   margin: 3rem auto;
+  flex: 1 1 0;
+}
+.buttons {
+  text-align: center;
+  margin-top: 2rem;
+}
+.button {
+  margin-inline: 1rem;
+  background-color: #d0deff;
+  color: #181c26;
+  border: 1px solid black;
+  border-radius: 30px;
+  font-weight: bold;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+.buttontext {
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
 }

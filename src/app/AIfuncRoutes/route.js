@@ -2,8 +2,10 @@ import { NextResponse } from "next/server.js";
 import { run, AIformatting, PostData } from "../../Components/Help.jsx";
 
 export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const difficulty = searchParams.get("difficulty");
   try {
-    const text = await run();
+    const text = await run(difficulty);
     const formattedText = await AIformatting(text);
     await PostData(formattedText);
     return NextResponse.json({
@@ -15,9 +17,9 @@ export async function GET(req) {
     return NextResponse.json(
       {
         success: false,
-        error: "something wrong happend",
+        error: "Something wrong happend.",
       },
-      { staus: 500 },
+      { status: 500 }
     );
   }
 }

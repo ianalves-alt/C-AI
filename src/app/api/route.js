@@ -43,7 +43,7 @@ export async function GET(req) {
     console.error("Unexpected error:", error);
     return NextResponse.json(
       { success: false, error: "Error processing request" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -62,7 +62,7 @@ export async function POST(req) {
   }
   const array = data.previousPrompts;
   array.push(JSON.parse(prompt));
-  if (array.length > 20) {
+  if (array.length > 8) {
     array.splice(0, array.length - 1);
   }
   try {
@@ -72,7 +72,7 @@ export async function POST(req) {
     console.error("error adding to file", error);
     return NextResponse.json(
       { message: "Error updating the prompt" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -111,7 +111,7 @@ export async function PATCH(req, res) {
     console.error("error writing to file", "  ", err);
     return NextResponse.json(
       { message: "Error updating the prompt" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

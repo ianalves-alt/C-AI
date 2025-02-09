@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "electron-serve": "^2.1.1",
     "file-system": "^2.2.2",
     "filesystem": "^1.0.1",

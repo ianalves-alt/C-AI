@@ -2,11 +2,23 @@
   "difficultyLevel": "_",
   "previousPrompts": [
     {
-      "project report generation for student records": "file output, report generation, data formatting, error handling"
+      "project formatted output": "printf function and format specifiers"
     },
     {
-      "project search student record": "linear search, file input/output, string comparison, error handling"
+      "project include header": "preprocessor directives"
+    },
+    {
+      "project variable use": "variable declaration and assignment"
+    },
+    {
+      "project arithmetic operations": "arithmetic operators"
+    },
+    {
+      "project number guessing": "conditional statements"
+    },
+    {
+      "project loop printing": "for loops"
     }
   ],
-  "recentPrompt": "This project expands on the student record system by adding the ability to search for specific student records.  The program should allow the user to input a student ID and then search the data file (previously created and populated) for a matching ID. If a match is found, the program should display the student's complete record (ID, name, and all grades and weights); otherwise, it should display a \"Student not found\" message. This introduces the concept of linear searching through data stored in a file, reinforcing file input/output and string comparison (comparing the entered ID with IDs in the file).  Error handling should still be implemented for file operations, and the program should gracefully handle cases where the input ID is invalid (e.g., not a number or not found in the file).\n"
+  "recentPrompt": "This project focuses on using loops in C. Create a program that takes an integer as input from the user, representing the number of times to print \"Hello, world!\".  The program should then use a `for` loop to print the message that many times. This improves your understanding of iterative control flow.\n\nTo use this project, declare an integer variable. Use `scanf` to get user input. Then, use a `for` loop to iterate the specified number of times, printing \"Hello, world!\" in each iteration using `printf`.\n\nExample usage:\n\nEnter the number of times to print: 5\nHello, world!\nHello, world!\nHello, world!\nHello, world!\nHello, world!\n"
 }

@@ -12,22 +12,40 @@ const getData = async () => {
   const data = await req.json();
   return data;
 };
-const getPrompt = async (difficultyLevel, userFeedback) => {
-  let data = await getData();
-  let basePrompt = "give me an C programming project.";
+const getPrompt = async (userFeedback) => {
+  const [data, feedback] = await Promise.all([getData(), Number(userFeedback)]);
 
-  if (userFeedback === 3) {
-    basePrompt = "The last project was too hard. Suggest an easier one.";
-  } else if (userFeedback === 1) {
-    basePrompt =
-      "The last project was too easy. Suggest a slightly harder one.";
-  } else if (!data.data.recentPrompt) {
-    basePrompt = "I'm new to programming. Suggest a very simple project in C.";
-  } else {
-    basePrompt += ` make it a tiny bit harder than the last project, introducing one concept at a time. last Project: (${data.data.recentPrompt}).`;
+  let basePrompt =
+    "Give me a C programming project"; /* = "give me a C programming project";*/
+
+  // 0 = base prompt
+  if (feedback === 0) {
+    basePrompt += `base the project following a pattern of linear difficulty, assume the person never coded before, and base it on the last projects: ${JSON.stringify(
+      data.data.previousPrompts
+    )}, make it one clean paragraph explaining new concepts, descriptions and without special formatting, just one clean paragraph, each project should introduce a new concept for a aspiring programmer based on the last projects, focus on slow progression, youre an ai that helps people that know nothing about programming learn by doing projects each day, so, based on the given previous prompts, give a project to teach the clueless person, a new, simple compared to the last one, concept the new concept must not use concepts not given yet, it must be a ladder where you cant show something you didnt covered yet`;
   }
 
-  basePrompt += `base the prompt following a pattern of linear difficulty, assume the person never coded before, and base it on the last projects: ${data.data.previousPrompts}, make it one clean paragraph explaining new concepts, descriptions and without special formatting, just one clean paragraph, each project should introduce a new concept for a aspiring programmer based on the last projects, focus on slow progression, youre an ai that helps people that know nothing about programming learn by doing projects each day, so, based on the given previous prompts, give a project to teach the clueless person, a new, simple compared to the last one, concept the new concept must not use concepts not given yet, it must be a ladder where you cant show something you didnt covered yet`;
+  if (feedback === 3) {
+    basePrompt = `The last project was too hard. Suggest an easier one. Last project was: ${
+      data.data.recentPrompt
+    }, and the last 5(or less) projects were: ${JSON.stringify(
+      data.data.previousPrompts
+    )}`;
+  }
+  //3 means it was to hard
+  if (feedback === 1) {
+    basePrompt = `The last project was too easy. Suggest a slightly harder one. Last project was: ${
+      data.data.recentPrompt
+    }, and the last 5(or less) projects were: ${JSON.stringify(
+      data.data.previousPrompts
+    )}`;
+  }
+  if (!data.data.recentPrompt) {
+    basePrompt = "I'm new to programming. Suggest a very simple project in C.";
+  }
+  //1 means it was too easy
+  basePrompt +=
+    ", be really descriptive, and make it simple to understand, keep under 100 words if possible, clean text without special formatting, just a clean string of text, include what will the user improve with the project, and example output of program, as how project should be used by other people. the project should follow a pattern of showing a concept at a time, without showing concepts that need other concepts that you didnt show yet, and the concepts should be the core of C coding, teach the particularities of the C language and how to use them, with each concept, dont be stuck on projects programming by itself, but new language concepts, and how to use them";
 
   return basePrompt;
 };
@@ -63,23 +81,18 @@ export const patchData = async (difficultyLevel, newPrompt) => {
     console.error(`failed to patch, status code: ${res.status}`);
   } else {
     const data = await res.json();
-    console.log(
-      "Data updated successfully:",
-      data,
-      "if this works first try im gay", //for the matter it did not
-    );
   }
 };
-export const run = async () => {
-  const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+export const run = async (feedback) => {
+  const genai = new GoogleGenerativeAI(process.env.api_key);
+  const model = genai.getGenerativeModel({ model: "gemini-1.5-flash" });
   const chat = model.startChat({
     history: [],
-    generationConfig: {
-      maxOutputTokens: 500,
+    generationconfig: {
+      maxoutputtokens: 500,
     },
   });
-  const prompt = await getPrompt();
+  const prompt = await getPrompt(feedback);
 
   const result = await chat.sendMessage(prompt);
   const response = result.response;
@@ -91,6 +104,7 @@ export const run = async () => {
 export const AIformatting = async (text) => {
   const genAI = new GoogleGenerativeAI(process.env.API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
   const chat = model.startChat({
     history: [],
     generationConfig: {
@@ -100,8 +114,8 @@ export const AIformatting = async (text) => {
   });
   const prompt = `follow the pattern(each one is describing the concept covered in a C programming project) and answer in the same format: "project print to console ": "basic printing to console"/ "project number guessing": "conditional statements"/${text}: ...?. just answer with the third one. `;
   const result = await chat.sendMessage(prompt);
+
   const response = result.response;
   const formatted = response.text();
-  console.log(formatted);
   return formatted;
 };

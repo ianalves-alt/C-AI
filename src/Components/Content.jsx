@@ -1,33 +1,127 @@
 "use client";
 import "@/Styles/main.css";
-import { useState } from "react";
-export default function Content({ text }) {
+import { Suspense, useEffect, useMemo, useState } from "react";
+
+const resourceCache = new Map();
+export default function Content() {
+  //variables
   const [show, setShow] = useState(false);
-  const [show2, setshow2] = useState(false);
-  const T = show ? text : "";
-  const buttonText = show ? "Todays challenge" : "";
+  const [text, setText] = useState("");
+  const [condition, setCondition] = useState(false);
+  const [difficulty, setDifficulty] = useState(null);
+  const [count, setCount] = useState(0);
+
+  const fetchFromAPI = async (difficulty) => {
+    const response = await fetch(
+      `http://localhost:3000/AIfuncRoutes?difficulty=${difficulty}`,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Response was not ok");
+    }
+    return response.json();
+  };
+
+  const creatResourse = (fetcher) => {
+    let state = "pending";
+    let result;
+    let suspender = fetcher()
+      .then((data) => {
+        state = "complete";
+        result = data;
+      })
+      .catch((error) => {
+        state = "error";
+        result = error;
+      });
+    return {
+      read() {
+        if (state === "pending") throw suspender;
+        if (state === "error") throw result;
+        return result;
+      },
+    };
+  };
+  const fetchRes = (difficulty) => {
+    if (!resourceCache.has(difficulty)) {
+      resourceCache.set(
+        difficulty,
+        creatResourse(() => fetchFromAPI(difficulty))
+      );
+    }
+    return resourceCache.get(difficulty);
+  };
+  const handleDiffChange = (ndifficulty) => {
+    if (difficulty === ndifficulty) {
+      setCount((prev) => prev + 1);
+    } else {
+      setDifficulty(ndifficulty);
+      setCount(0);
+    }
+  };
+
+  const ContentSuspense = ({ difficulty }) => {
+    const cacheKey = `${difficulty}-${count}`;
+    if (!resourceCache.has(cacheKey)) {
+      resourceCache.set(
+        cacheKey,
+        creatResourse(() => fetchFromAPI(difficulty))
+      );
+    }
+    const resource = resourceCache.get(cacheKey);
+    const data = resource.read();
+    return <div>{data.text}</div>;
+  };
   return (
     <>
       <div className="wrapperMain">
-        <div className="text">
-          <div>{T}</div>
+        {!condition && (
+          <button
+            className="chalenge"
+            onClick={() => {
+              setCondition(true);
+              setDifficulty(0);
+            }}
+          >
+            Today&apos;s Challenge
+          </button>
+        )}
+        {condition && (
+          <>
+            <Suspense fallback={<div>loading...</div>}>
+              {difficulty !== null && (
+                <ContentSuspense
+                  difficulty={difficulty}
+                  key={`${difficulty}-${count}`}
+                />
+              )}
+            </Suspense>
 
-          <div>
-            <button
-              onClick={() => {
-                if (show == false) {
-                  setShow(true);
-                } else {
-                  setShow(false);
-                }
-              }}
-              className="chalenge"
-              style={{ display: show ? "none" : "block" }}
-            >
-              Todays Challenge
-            </button>
-          </div>
-        </div>
+            <div className="buttons">
+              <div className="buttontext">How hard was this challenge?</div>
+              <button className="button" onClick={() => handleDiffChange(1)}>
+                easy
+              </button>
+              <button
+                className="button"
+                onClick={() => console.log("medium pressed, fix this later")}
+              >
+                medium
+              </button>
+              <button
+                className="button"
+                onClick={() => {
+                  handleDiffChange(3);
+                  console.log("hard pressed, fix this later");
+                }}
+              >
+                hard
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
