@@ -1,6 +1,33 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
-* {
-  background-color: #222436;
-  color: #ececec;
+body {
+  background: linear-gradient(
+    135deg,
+    #000000,
+    #005a9c,
+    #6a0dad,
+    #c28562,
+    #000000,
+    #005a9c,
+    #6a0dad,
+    #c28562,
+    #000000,
+    #005a9c,
+    #6a0dad,
+    #c28562,
+    #000000
+  );
+  background-size: 1000% 1200%;
+  animation: gradientAnimation 210s linear infinite;
   font-family: "Montserrat";
+  min-height: 100vh;
+  color: #ececec;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
 }

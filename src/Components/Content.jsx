@@ -5,8 +5,6 @@ import { Suspense, useEffect, useMemo, useState } from "react";
 const resourceCache = new Map();
 export default function Content() {
   //variables
-  const [show, setShow] = useState(false);
-  const [text, setText] = useState("");
   const [condition, setCondition] = useState(false);
   const [difficulty, setDifficulty] = useState(null);
   const [count, setCount] = useState(0);

@@ -2,23 +2,20 @@
   "difficultyLevel": "_",
   "previousPrompts": [
     {
-      "project formatted output": "printf function and format specifiers"
+      "project simple calculator": "basic arithmetic operators"
     },
     {
-      "project include header": "preprocessor directives"
+      "project simple calculator": "variables, basic arithmetic, user input, output"
     },
     {
-      "project variable use": "variable declaration and assignment"
+      "project simple greeting": "basic printing to console"
     },
     {
-      "project arithmetic operations": "arithmetic operators"
+      "project integer variable operations": "variable declaration, assignment, and basic arithmetic operations"
     },
     {
-      "project number guessing": "conditional statements"
-    },
-    {
-      "project loop printing": "for loops"
+      "project rectangle area": "variables, arithmetic operations, user input/output"
     }
   ],
-  "recentPrompt": "This project focuses on using loops in C. Create a program that takes an integer as input from the user, representing the number of times to print \"Hello, world!\".  The program should then use a `for` loop to print the message that many times. This improves your understanding of iterative control flow.\n\nTo use this project, declare an integer variable. Use `scanf` to get user input. Then, use a `for` loop to iterate the specified number of times, printing \"Hello, world!\" in each iteration using `printf`.\n\nExample usage:\n\nEnter the number of times to print: 5\nHello, world!\nHello, world!\nHello, world!\nHello, world!\nHello, world!\n"
+  "recentPrompt": "Today's project builds on our previous work with variables and arithmetic. We'll create a program that calculates the area of a rectangle.  This introduces the concept of using multiple variables together to perform a calculation. You'll declare variables for length and width, get their values from the user using `scanf`, calculate the area (length * width), and then display the result using `printf`. This project improves your understanding of variable usage, input/output operations, and applying arithmetic in a more practical context.  Example output: \"Enter length: 5\\nEnter width: 10\\nArea: 50\".\n"
 }
