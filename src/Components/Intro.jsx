@@ -4,6 +4,7 @@ import "@/Styles/intro.css";
 import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Name from "./introinfo/Name";
 
 export default function Intro({ onFinish }) {
   const [showFirstContent, setShowFirstContent] = useState(true);
@@ -33,13 +34,15 @@ export default function Intro({ onFinish }) {
                 Gradually improve your C programming skills by doing daily
                 challenges of increasing difficulty!
               </div>
-              <div className="textExplanationTitle">What is Panko?</div>
-              <div className="textExplanation">
-                WellAI is a learning tool designed to help you break free from
-                tutorial hell and truly master programming by doing. Every day,
-                you&apos;ll receive a coding challenge tailored to your skill
-                level, ensuring you&apos;re always progressing at the right
-                pace.
+              <div className="textExplanationContainer">
+                <div className="textExplanationTitle">What is Panko?</div>
+                <div className="textExplanation">
+                  WellAI is a learning tool designed to help you break free from
+                  tutorial hell and truly master programming by doing. Every
+                  day, you&apos;ll receive a coding challenge tailored to your
+                  skill level, ensuring you&apos;re always progressing at the
+                  right pace.
+                </div>
               </div>
 
               <button
@@ -71,15 +74,7 @@ export default function Intro({ onFinish }) {
             transition={{ duration: 0.5 }}
             className="absolute w-full h-full flex items-center justify-center text-white text-3xl"
           >
-            <div className="intro-container">
-              <div className="title">Welcome to WellAI!</div>
-              <div className="subtitle">
-                Let's get started on your coding journey.
-              </div>
-              <button className="introduce" onClick={onFinish}>
-                Start Learning
-              </button>
-            </div>
+            <Name />
           </motion.div>
         )}
       </AnimatePresence>
