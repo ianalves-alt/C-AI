@@ -4,7 +4,7 @@ import "@/Styles/intro.css";
 import Image from "next/image";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Name from "./introinfo/Name";
+import IntroFinish from "./IntroFinish.jsx";
 
 export default function Intro({ onFinish }) {
   const [showFirstContent, setShowFirstContent] = useState(true);
@@ -74,7 +74,7 @@ export default function Intro({ onFinish }) {
             transition={{ duration: 0.5 }}
             className="absolute w-full h-full flex items-center justify-center text-white text-3xl"
           >
-            <Name />
+            <IntroFinish />
           </motion.div>
         )}
       </AnimatePresence>

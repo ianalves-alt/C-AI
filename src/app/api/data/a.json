@@ -2,20 +2,20 @@
   "difficultyLevel": "_",
   "previousPrompts": [
     {
-      "project simple calculator": "basic arithmetic operators"
+      "project age verification": "conditional statements"
     },
     {
-      "project simple calculator": "variables, basic arithmetic, user input, output"
+      "project temperature converter": "variables, user input, arithmetic operations"
     },
     {
-      "project simple greeting": "basic printing to console"
+      "project hello world": "basic output"
     },
     {
-      "project integer variable operations": "variable declaration, assignment, and basic arithmetic operations"
+      "project integer variable": "integer variables"
     },
     {
-      "project rectangle area": "variables, arithmetic operations, user input/output"
+      "project floating-point calculator": "floating-point numbers"
     }
   ],
-  "recentPrompt": "Today's project builds on our previous work with variables and arithmetic. We'll create a program that calculates the area of a rectangle.  This introduces the concept of using multiple variables together to perform a calculation. You'll declare variables for length and width, get their values from the user using `scanf`, calculate the area (length * width), and then display the result using `printf`. This project improves your understanding of variable usage, input/output operations, and applying arithmetic in a more practical context.  Example output: \"Enter length: 5\\nEnter width: 10\\nArea: 50\".\n"
+  "recentPrompt": "Let's create a simple calculator that adds two numbers. Building upon your knowledge of variables, user input, and arithmetic, this project introduces the concept of *floating-point numbers* (or floats). Floats are used to represent numbers with decimal points. In this project, declare two float variables to store the numbers the user inputs. Prompt the user to enter two numbers, read those numbers using `scanf` (remember to use `%f` for floats), add the two float variables, store the result in another float variable, and print the result to the console, using `printf`. This reinforces arithmetic operations and introduces a new numeric datatype, allowing for more precise calculations and handling of numbers with decimals. Example output: \"Enter number 1: 3.14\\nEnter number 2: 2.0\\nSum: 5.14\". You will improve your understanding of variables and how to use different types and `printf`.\n"
 }

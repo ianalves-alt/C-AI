@@ -4,12 +4,21 @@ import { useState } from "react";
 import PreferredPType from "./PreferredPType";
 
 export default function Language() {
+  
   const [lang, setLang] = useState("Select");
+  //this is just the language
+  
+  
   const [invalid, setInvalid] = useState(false);
-  const [selectedLang, setSelectedLang] = useState([]);
+  //condition to see if the user tries to send some invalid input
+  
   const [projectType, setProjectType] = useState([]);
+  //this is the {lang} projectType, if java then ["System Programming", "Android Apps", "Web Apps"] for example
+
   const [showFirstContent, setShowFirstContent] = useState(true);
+  //this is just the transition from one component to another
   const [isSubmitting, setIsSubmitting] = useState(false);
+  //it prevents the user to click a billion times and send a billion requests
 
   const languageToProjects = {
     Select: "",
@@ -35,16 +44,9 @@ export default function Language() {
     bash: ["Shell Scripting", "Automation"],
     powershell: ["Automation", "Scripting"],
   };
-  const handleChange = async (e) => {
-    let lang = e.target.value;
-    setLang(lang);
-    setIsSubmitting(true);
-
-    if (languageToProjects[lang]) {
-      setProjectType(languageToProjects[lang]);
-    } else {
-      setProjectType([]);
-    }
+  //a big object for each language, and its respectives types of projects
+  const handleChangeSubmit = async () => {
+    
     try {
       const response = await fetch("http://localhost:3000/UserInfo", {
         method: "POST",
@@ -61,7 +63,7 @@ export default function Language() {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  };    //the only function, how efficient(do not count the event handlers functions xp)            
   const handleDenial = () => {
     setTimeout(() => {
       setInvalid(false);
@@ -82,8 +84,15 @@ export default function Language() {
             >
               <div>
                 <h1>Which programming languange do you want to learn?</h1>
-                <form action="submit">
-                  <select onChange={handleChange}>
+                <div>
+                  <select onChange={(e) => {
+                    setLang(e.target.value)
+                    if(languageToProjects[e.target.value]){
+                      setProjectType(languageToProjects[e.target.value])
+                    }else{
+                      setProjectType([])
+                    }
+                  }}>
                     {Object.keys(languageToProjects).map((lang) => (
                       <option key={lang} value={lang}>
                         {lang.charAt(0).toUpperCase() + lang.slice(1)}
@@ -92,12 +101,12 @@ export default function Language() {
                   </select>
                   {invalid && <p>Select a valid programming language</p>}
                   <button
-                    type="submit"
                     onClick={() => {
                       if (lang === "Select") {
                         setInvalid(true);
                         handleDenial();
                       } else {
+                        handleChangeSubmit()
                         setShowFirstContent(false);
                       }
                     }}
@@ -105,7 +114,7 @@ export default function Language() {
                   >
                     Next
                   </button>
-                </form>
+                </div>
               </div>
             </motion.div>
           ) : (
@@ -117,7 +126,7 @@ export default function Language() {
               transition={{ duration: 0.5 }}
               className="absolute w-full h-full flex items-center justify-center text-white text-3xl"
             >
-              <PreferredPType></PreferredPType>
+                <PreferredPType ptype={projectType}/>
             </motion.div>
           )}
         </AnimatePresence>

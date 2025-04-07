@@ -14,10 +14,10 @@ export default function Content() {
       `http://localhost:3000/AIfuncRoutes?difficulty=${difficulty}`,
       {
         headers: { "Content-Type": "application/json" },
-      }
+      },
     );
     if (!response.ok) {
-      throw new Error("Response was not ok");
+      throw new Error(`Response was not ok, status: ${response.status}`);
     }
     return response.json();
   };
@@ -46,7 +46,7 @@ export default function Content() {
     if (!resourceCache.has(difficulty)) {
       resourceCache.set(
         difficulty,
-        creatResourse(() => fetchFromAPI(difficulty))
+        creatResourse(() => fetchFromAPI(difficulty)),
       );
     }
     return resourceCache.get(difficulty);
@@ -65,7 +65,7 @@ export default function Content() {
     if (!resourceCache.has(cacheKey)) {
       resourceCache.set(
         cacheKey,
-        creatResourse(() => fetchFromAPI(difficulty))
+        creatResourse(() => fetchFromAPI(difficulty)),
       );
     }
     const resource = resourceCache.get(cacheKey);

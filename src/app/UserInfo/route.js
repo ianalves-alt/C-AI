@@ -8,7 +8,7 @@ const dataFilePath = path.join(__dirname, "data", "data.json");
 
 export async function POST(req) {
   try {
-    const { name, lang } = await req.json();
+    const { name, lang, type } = await req.json();
     let data = [];
 
     try {
@@ -17,7 +17,7 @@ export async function POST(req) {
     } catch (error) {
       console.error(error);
     }
-    data.push({ name, lang });
+    data.push({ name, lang, type });
 
     await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2), "utf-8");
 

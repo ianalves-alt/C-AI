@@ -21,7 +21,7 @@ const getPrompt = async (userFeedback) => {
   // 0 = base prompt
   if (feedback === 0) {
     basePrompt += `base the project following a pattern of linear difficulty, assume the person never coded before, and base it on the last projects: ${JSON.stringify(
-      data.data.previousPrompts
+      data.data.previousPrompts,
     )}, make it one clean paragraph explaining new concepts, descriptions and without special formatting, just one clean paragraph, each project should introduce a new concept for a aspiring programmer based on the last projects, focus on slow progression, youre an ai that helps people that know nothing about programming learn by doing projects each day, so, based on the given previous prompts, give a project to teach the clueless person, a new, simple compared to the last one, concept the new concept must not use concepts not given yet, it must be a ladder where you cant show something you didnt covered yet`;
   }
 
@@ -29,7 +29,7 @@ const getPrompt = async (userFeedback) => {
     basePrompt = `The last project was too hard. Suggest an easier one. Last project was: ${
       data.data.recentPrompt
     }, and the last 5(or less) projects were: ${JSON.stringify(
-      data.data.previousPrompts
+      data.data.previousPrompts,
     )}`;
   }
   //3 means it was to hard
@@ -37,7 +37,7 @@ const getPrompt = async (userFeedback) => {
     basePrompt = `The last project was too easy. Suggest a slightly harder one. Last project was: ${
       data.data.recentPrompt
     }, and the last 5(or less) projects were: ${JSON.stringify(
-      data.data.previousPrompts
+      data.data.previousPrompts,
     )}`;
   }
   if (!data.data.recentPrompt) {
@@ -85,8 +85,9 @@ export const patchData = async (difficultyLevel, newPrompt) => {
 };
 export const run = async (feedback) => {
   const genai = new GoogleGenerativeAI(process.env.api_key);
-  const model = genai.getGenerativeModel({ model: "gemini-1.5-flash" });
-  const chat = model.startChat({
+
+  const model = await genai.getGenerativeModel({ model: "gemini-2.0-flash" });
+  const chat = await model.startChat({
     history: [],
     generationconfig: {
       maxoutputtokens: 500,
@@ -95,15 +96,15 @@ export const run = async (feedback) => {
   const prompt = await getPrompt(feedback);
 
   const result = await chat.sendMessage(prompt);
-  const response = result.response;
-  const text = response.text();
+  const response = await result.response;
+  const text = await response.text();
 
   await patchData("_", text);
   return text;
 };
 export const AIformatting = async (text) => {
-  const genAI = new GoogleGenerativeAI(process.env.API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const genAI = new GoogleGenerativeAI(process.env.api_key);
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
   const chat = model.startChat({
     history: [],

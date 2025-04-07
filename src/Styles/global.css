@@ -1,28 +1,41 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
-body {
-  background: linear-gradient(
-    135deg,
-    #000000,
-    #005a9c,
-    #6a0dad,
-    #c28562,
-    #000000,
-    #005a9c,
-    #6a0dad,
-    #c28562,
-    #000000,
-    #005a9c,
-    #6a0dad,
-    #c28562,
-    #000000
-  );
-  background-size: 1000% 1200%;
-  animation: gradientAnimation 210s linear infinite;
-  font-family: "Montserrat";
-  min-height: 100vh;
-  color: #ececec;
-}
 
+section {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: black;
+  z-index: -1;
+}
+.animate {
+  transition: all 0.3s ease-in;
+}
+.blob {
+  display: flex;
+}
+.blob1,
+.blob2,
+.blob3 {
+  filter: blur(80px) brightness(1.2)
+    drop-shadow(0 0 20px rgba(92, 133, 230, 0.7));
+  position: relative;
+}
+.blob1 {
+  bottom: 4rem;
+  left: 15rem;
+}
+.blob2 {
+  top: 7rem;
+}
+.blob3 {
+  right: 10rem;
+}
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 0%;
